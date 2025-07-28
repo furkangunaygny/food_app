@@ -1,37 +1,37 @@
-class CardClass {
+class Foods {
   final String assetImage;
   final String title;
   final double price;
   final double rating;
-
-  CardClass({
+  Foods({
     required this.assetImage,
     required this.title,
     required this.price,
     required this.rating,
   });
+
 }
 
-final List<CardClass> cardList = [
-  CardClass(
+final List<Foods> foodList = [
+  Foods(
     assetImage: 'assets/cigkofte.jpg',
     title: 'Çiğ Köfte',
-    price: 75,
+    price: 6234234234287.92,
     rating: 4.2,
   ),
-  CardClass(
+  Foods(
     assetImage: 'assets/lahmacun.jpg',
-    title: 'Lahmacun',
+    title: 'Lahmacun sdfdsf xzdfds sdfsdfdsf sdfsd',
     price: 90,
     rating: 4.5,
   ),
-  CardClass(
+  Foods(
     assetImage: 'assets/kebap.jpg',
     title: 'Kebap',
     price: 250,
     rating: 4.8,
   ),
-  CardClass(
+  Foods(
     assetImage: 'assets/corba.jpg',
     title: 'Mercimek Çorba',
     price: 110,
