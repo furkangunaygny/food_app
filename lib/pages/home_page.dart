@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/classes/food_class.dart';
+import 'package:food_app/models/food_model.dart';
+import 'package:food_app/models/restourants_model.dart';
 import 'package:food_app/pages/food_page.dart';
 import 'package:food_app/services/food_service.dart';
+import 'package:food_app/services/restaurant_service.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../models/food_model.dart';
 import '../widgets/card_widget.dart';
 import 'profile_page.dart';
 import 'package:food_app/constant.dart';
@@ -16,12 +19,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
-  int iconIndex = 0;
-  late Future<List<Recipe>> recipeFuture;
+  late Future<List<Food>> restaurantFuture;
   @override
   void initState() {
     super.initState();
-    recipeFuture = fetchFoods();
+    restaurantFuture = fetchFoods(currentPageIndex);
   }
 
   @override
@@ -43,8 +45,9 @@ class _HomePageState extends State<HomePage> {
       body: IndexedStack(
         index: currentPageIndex,
         children: [
-          FutureBuilder<List<Recipe>>(
-            future: recipeFuture,
+          //yemek listesi
+          FutureBuilder<List<Food>>(
+            future: restaurantFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -55,11 +58,13 @@ class _HomePageState extends State<HomePage> {
               } else {
                 return CardWidget(
                   cardList: snapshot.data!,
-                  onTap: (selectedRecipe) {
+                  onTap: (selectedRestaurant) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => FoodPage(recipe: selectedRecipe),
+                        builder: (context) => FoodPage(
+                          food: selectedRestaurant,
+                        ),
                       ),
                     );
                   },
@@ -97,6 +102,7 @@ class _HomePageState extends State<HomePage> {
             selectedIcon: Icon(Icons.person, color: Colors.amber),
             icon: Icon(Icons.person_outlined),
             label: 'Profile',
+            //Profile
           ),
         ],
       ),

@@ -1,12 +1,16 @@
+///
+/// Food Model
+///
+/// Yemek modeli
+///
 
-class Recipe {
-  
+class Food {
   final String title;
   final String image;
   final double price;
   final double rating;
   final double maxReadyTime;
-  Recipe( 
+  Food(
       {required this.title,
       required this.image,
       required this.price,

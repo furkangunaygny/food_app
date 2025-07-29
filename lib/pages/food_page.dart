@@ -1,52 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/classes/food_class.dart';
 import 'package:food_app/models/food_model.dart';
+import 'package:food_app/models/restourants_model.dart';
 import 'package:food_app/services/food_service.dart';
+import 'package:food_app/services/restaurant_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class FoodPage extends StatefulWidget {
-  final Recipe recipe;
-  const FoodPage({super.key, required this.recipe});
+  final Food food;
+
+  const FoodPage({super.key, required this.food});
 
   @override
   State<FoodPage> createState() => _FoodPageState();
 }
 
+String cleanImageUrl(String url) {
+  return url.split('?').first;
+}
+
+String formatlaOndalik(num sayi) {
+  final formatter = NumberFormat("0.0", "en_US");
+  return formatter.format(sayi);
+}
+
+String formatlaVirgulle(num sayi) {
+  final formatter = NumberFormat("#,##0.##", "en_US");
+  return formatter.format(sayi);
+}
+
 class _FoodPageState extends State<FoodPage> {
-  late Future<List<Recipe>> foodPageList;
-  String formatPrice(double price) {
-    final formatter = NumberFormat("#,##0.00", "en_US");
-    return formatter.format(price);
-  }
-
-  String formatRating(double rating) {
-    final formatter = NumberFormat("0.0", "en_US");
-    return formatter.format(rating);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    foodPageList = fetchFoods();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final recipe = widget.recipe;
+    final food = widget.food;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(0, 255, 255, 255),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 30,
-            ),
-            Expanded(
-              child: Stack(
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Stack(
                 fit: StackFit.loose,
                 children: [
                   Container(
@@ -54,7 +53,7 @@ class _FoodPageState extends State<FoodPage> {
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       image: DecorationImage(
-                        image: NetworkImage(recipe.image),
+                        image: NetworkImage(cleanImageUrl(food.image)),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -74,17 +73,21 @@ class _FoodPageState extends State<FoodPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(recipe.title),
+                          Text(food.title),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               //Restaurant Information
                               Row(
                                 children: [
-                                  const Icon(Icons.motorcycle_outlined),
+                                  const Icon(
+                                    Icons.motorcycle,
+                                    color: Colors.green,
+                                  ),
                                   Text(
                                     'Ücretsiz Teslimat',
-                                    style: GoogleFonts.abel(),
+                                    style:
+                                        GoogleFonts.abel(color: Colors.green),
                                   )
                                 ],
                               ),
@@ -99,7 +102,7 @@ class _FoodPageState extends State<FoodPage> {
                                   ),
                                   Text(
                                     overflow: TextOverflow.ellipsis,
-                                    formatRating(recipe.rating).toString(),
+                                    formatlaOndalik(food.rating).toString(),
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 ],
@@ -125,7 +128,7 @@ class _FoodPageState extends State<FoodPage> {
                                 ],
                                 color: Colors.white,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
+                                    BorderRadius.all(Radius.circular(50))),
                             child: Icon(
                               Icons.not_listed_location_sharp,
                               size: 70,
@@ -134,11 +137,31 @@ class _FoodPageState extends State<FoodPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
-              ),
-            ),
-          ],
+              ), /*
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: foodList.length,
+                itemBuilder: (context, index) {
+                  final foods = [index];
+                  return GestureDetector(
+                    child: Card(
+                      elevation: 5,
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(food.title),
+                          Text((formatlaVirgulle(food.price).toString())),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              )*/
+            ],
+          ),
         ),
       ),
     );

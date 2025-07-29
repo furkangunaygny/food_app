@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/constant.dart';
 import 'package:food_app/models/food_model.dart';
-import 'package:intl/intl.dart';
+import 'package:food_app/models/restourants_model.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class CardWidget extends StatelessWidget {
   const CardWidget({super.key, required this.cardList, required this.onTap});
-  final List<Recipe> cardList;
-  final void Function(Recipe) onTap;
-  
+  final List<Food> cardList;
+  final void Function(Food) onTap;
 
-  String formatPrice(double price) {
-    final formatter = NumberFormat("#,##0.00", "en_US");
-    return formatter.format(price);
+  String cleanImageUrl(String url) {
+    return url.split('?').first;
   }
 
-  String formatRating(double rating) {
+  String formatlaVirgulle(num sayi) {
+    final formatter = NumberFormat("#,##0.##", "en_US");
+    return formatter.format(sayi);
+  }
+
+  String formatlaOndalik(num sayi) {
     final formatter = NumberFormat("0.0", "en_US");
-    return formatter.format(rating);
+    return formatter.format(sayi);
   }
 
   @override
@@ -53,7 +57,7 @@ class CardWidget extends StatelessWidget {
                         borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(16)),
                         image: DecorationImage(
-                          image: NetworkImage('${card.image}'),
+                          image: NetworkImage(cleanImageUrl(card.image)),
                           fit: BoxFit.cover,
                         )),
                   ),
@@ -103,7 +107,7 @@ class CardWidget extends StatelessWidget {
                                     ),
                                     Text(
                                       overflow: TextOverflow.ellipsis,
-                                      formatRating(card.rating).toString(),
+                                      formatlaOndalik(card.rating).toString(),
                                       style: TextStyle(color: textColor),
                                     ),
                                   ],
@@ -114,11 +118,15 @@ class CardWidget extends StatelessWidget {
                           //Price İnformation
                           Row(
                             children: [
-                              const Icon(Icons.motorcycle_outlined),
+                              const Icon(
+                                Icons.motorcycle,
+                                color: Colors.green,
+                              ),
                               Text(
-                                'Ücretsiz Teslimat',
-                                style: GoogleFonts.abel(),
-                              )
+                                'xx Teslimat',
+                                style: GoogleFonts.abel(color: Colors.green),
+                              ),
+                              Text(' - ${(card.maxReadyTime)}' ,style:GoogleFonts.alumniSansCollegiateOne() ,)
                             ],
                           ),
                           Row(
@@ -130,7 +138,7 @@ class CardWidget extends StatelessWidget {
                                 color: Colors.green,
                               ),
                               Text(
-                                "${formatPrice(card.price)} ₺",
+                                "${(formatlaVirgulle(card.price))} ₺",
                                 style: TextStyle(color: textColor),
                               ),
                               const SizedBox(height: 4),

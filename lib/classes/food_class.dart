@@ -1,4 +1,4 @@
-class Foods {
+/*class Foods {
   final String assetImage;
   final String title;
   final double price;
@@ -38,3 +38,4 @@ final List<Foods> foodList = [
     rating: 4.2,
   ),
 ];
+*/
