@@ -25,18 +25,19 @@ Future<List<Food>> fetchFoods(page) async {
   final String url = getUrl(page, apiKey);
 
   final response = await http.get(Uri.parse(url));
-  
 
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
+    print(data); // Burada API cevabını gör
 
     List<Food> foods = (data['results'] as List).map((item) {
       return Food(
+        id: item['id'] ?? '',
         title: item['title'] ?? 'No Title',
         image: item['image'] ?? 'No image',
-        price: (item['pricePerServing'] ?? 0),
-        rating: (item['spoonacularScore'] ?? 0) / 20,
-        maxReadyTime: (item['maxReadyTime'] ?? 0),
+        price: (item['pricePerServing'] as num?)?.toDouble() ?? 0.0,
+        rating: (item['spoonacularScore'] / 20 as num?)?.toDouble() ?? 0.0,
+        readyInMinutes: (item['readyInMinutes'] as num?)?.toDouble() ?? 0.0,
       );
     }).toList();
 
